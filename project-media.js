@@ -164,12 +164,6 @@ window.PROJECT_GALLERIES = {
       },
       {
         "type": "image",
-        "src": "img-014.png",
-        "alt": "Steam locomotive CAD image 15",
-        "caption": "Steam locomotive CAD archive \u00b7 image 15"
-      },
-      {
-        "type": "image",
         "src": "img-015.png",
         "alt": "Steam locomotive CAD image 16",
         "caption": "Steam locomotive CAD archive \u00b7 image 16"
@@ -227,43 +221,8 @@ window.PROJECT_GALLERIES = {
         "src": "img-024.png",
         "alt": "Steam locomotive CAD image 25",
         "caption": "Steam locomotive CAD archive \u00b7 image 25"
-      },
-      {
-        "type": "image",
-        "src": "img-025.png",
-        "alt": "Steam locomotive CAD image 26",
-        "caption": "Steam locomotive CAD archive \u00b7 image 26"
-      },
-      {
-        "type": "image",
-        "src": "img-026.png",
-        "alt": "Steam locomotive CAD image 27",
-        "caption": "Steam locomotive CAD archive \u00b7 image 27"
-      },
-      {
-        "type": "image",
-        "src": "img-027.png",
-        "alt": "Steam locomotive CAD image 28",
-        "caption": "Steam locomotive CAD archive \u00b7 image 28"
-      },
-      {
-        "type": "image",
-        "src": "img-028.png",
-        "alt": "Steam locomotive CAD image 29",
-        "caption": "Steam locomotive CAD archive \u00b7 image 29"
-      },
-      {
-        "type": "image",
-        "src": "img-029.png",
-        "alt": "Steam locomotive CAD image 30",
-        "caption": "Steam locomotive CAD archive \u00b7 image 30"
-      },
-      {
-        "type": "image",
-        "src": "img-030.png",
-        "alt": "Steam locomotive CAD image 31",
-        "caption": "Steam locomotive CAD archive \u00b7 image 31"
       }
+
     ]
   },
   "shape-fight": {
