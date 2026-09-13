@@ -161,3 +161,56 @@ body[data-page="about"] .daily-dock.right .site-photo{display:none}
 @keyframes shore-wave{to{transform:translateX(24px)}}
 @media(max-width:1030px){.beach-shark-scene{width:138px;height:72px}.beach-shark{width:54px}.beach-palm{right:14px;height:44px}.beach-palm-frond{right:11px;bottom:48px}}
 @media(max-width:760px){.beach-shark-scene{display:none}}
+
+/* --- v18 lazy patch interactions --- */
+/* Pokémon mini window */
+.pokemon-party-window{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(26,31,37,.28);z-index:120}
+.pokemon-party-window.open{display:flex}
+.pokemon-party-window>div,.pokemon-party-window>.pokemon-party-grid{box-sizing:border-box}
+.pokemon-party-window{font-family:Arial,Helvetica,sans-serif}
+.pokemon-party-titlebar,.pokemon-party-grid,.pokemon-party-foot{width:min(510px,calc(100vw - 36px))}
+.pokemon-party-titlebar{display:flex;align-items:center;justify-content:space-between;padding:7px 9px;border:1px solid #9ea7ad;border-bottom:0;border-radius:8px 8px 0 0;background:linear-gradient(#fbfdff,#dfe5e9 48%,#c8d0d5 52%,#f5f7f8);box-shadow:inset 0 1px #fff;font:700 10px/1 Arial;color:#21394e;letter-spacing:.07em}
+.pokemon-party-close{width:21px;height:18px;padding:0;border:1px solid #8b969e;border-radius:8px;background:linear-gradient(#fff,#d9dee2);font:700 13px/15px Arial;color:#40515e;cursor:pointer}
+.pokemon-party-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px;background:#f8f9f9;border-left:1px solid #9ea7ad;border-right:1px solid #9ea7ad}
+.pokemon-slot{min-width:0;padding:7px 5px 6px;border:1px solid #aeb6bb;border-radius:6px;background:linear-gradient(#fff,#edf0f2);text-align:center;box-shadow:inset 0 1px #fff,0 1px 1px rgba(0,0,0,.08)}
+.pokemon-sprite-frame{height:88px;display:flex;align-items:center;justify-content:center;background:repeating-linear-gradient(0deg,#f7f9fa 0 3px,#eef2f4 3px 4px);border:1px solid #ccd2d6;border-radius:3px;margin-bottom:5px}
+.pokemon-sprite-frame img{max-width:86px;max-height:86px;image-rendering:pixelated;filter:drop-shadow(0 1px 0 rgba(0,0,0,.1))}
+.pokemon-slot b{display:block;font:13px Georgia,'Times New Roman',serif;font-weight:normal;color:#1d2730}
+.pokemon-slot small{display:block;font:7px Arial;color:#84909a;margin-top:2px}
+.pokemon-slot span{display:block;font:8px Arial;color:#4b5b67;margin-top:3px}
+.pokemon-party-foot{padding:5px 9px;border:1px solid #9ea7ad;border-top:0;border-radius:0 0 8px 8px;background:#eef2f4;color:#89949b;text-align:right;font:7px Arial}
+@media(max-width:560px){.pokemon-party-grid{grid-template-columns:repeat(2,1fr)}.pokemon-sprite-frame{height:76px}}
+
+/* tiny pixel bear that roams after Bears Approved is clicked */
+.roaming-bear{position:fixed;left:12px;bottom:103px;width:62px;height:48px;z-index:86;display:none;pointer-events:none;filter:drop-shadow(0 2px 1px rgba(0,0,0,.18))}
+.roaming-bear.awake{display:block}
+.roaming-bear img{width:62px;height:auto;image-rendering:pixelated}
+.roaming-bear.awake.restart{animation:bear-roam 22s linear infinite}
+@keyframes bear-roam{
+  0%{left:12px;bottom:103px;transform:scaleX(1)}
+  22%{left:calc(100vw - 84px);bottom:103px;transform:scaleX(1)}
+  23%{left:calc(100vw - 84px);bottom:103px;transform:scaleX(-1)}
+  48%{left:calc(100vw - 84px);bottom:calc(100vh - 110px);transform:scaleX(-1)}
+  49%{left:calc(100vw - 84px);bottom:calc(100vh - 110px);transform:scaleX(1)}
+  73%{left:12px;bottom:calc(100vh - 110px);transform:scaleX(1)}
+  74%{left:12px;bottom:calc(100vh - 110px);transform:scaleX(-1)}
+  100%{left:12px;bottom:103px;transform:scaleX(-1)}
+}
+@media(max-width:760px){.roaming-bear{width:48px}.roaming-bear img{width:48px}}
+
+/* Forest mode: screen-edge pine overlay, not a whole-site redesign. */
+.forest-overlay{position:fixed;inset:0;z-index:58;pointer-events:none;display:none;background:linear-gradient(rgba(12,42,30,.04),rgba(20,65,43,.09))}
+.forest-mode-active .forest-overlay{display:block}
+.forest-side{position:absolute;top:0;bottom:0;width:105px;opacity:.85;background-repeat:repeat-y;background-size:100px 132px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='132' viewBox='0 0 100 132'%3E%3Cg fill='none'%3E%3Cpath d='M15 130L30 82H20L34 48H25L43 9l18 39h-9l14 34H56l15 48z' fill='%232f6d4c' fill-opacity='.85'/%3E%3Cpath d='M0 132L10 98H4L16 68H9L25 34l16 34h-7l12 30h-7l10 34z' fill='%231c5539' fill-opacity='.68'/%3E%3Ccircle cx='72' cy='26' r='2' fill='%23dceab6'/%3E%3Ccircle cx='84' cy='68' r='1.5' fill='%23dceab6'/%3E%3C/g%3E%3C/svg%3E")}
+.forest-left{left:0}.forest-right{right:0;transform:scaleX(-1)}
+.forest-floor{position:absolute;left:0;right:0;bottom:0;height:54px;background:linear-gradient(0deg,rgba(19,66,44,.72),rgba(38,91,61,.34) 52%,transparent)}
+.forest-fireflies i{position:absolute;width:4px;height:4px;border-radius:50%;background:#e8efaf;box-shadow:0 0 5px #e8efaf;opacity:.8;animation:forest-float 4s ease-in-out infinite alternate}
+.forest-fireflies i:nth-child(1){left:9%;top:18%}.forest-fireflies i:nth-child(2){left:24%;top:68%;animation-delay:.7s}.forest-fireflies i:nth-child(3){right:22%;top:27%;animation-delay:1.3s}.forest-fireflies i:nth-child(4){right:8%;top:61%;animation-delay:2s}.forest-fireflies i:nth-child(5){left:49%;top:83%;animation-delay:2.8s}
+@keyframes forest-float{to{transform:translate(8px,-12px);opacity:.35}}
+.forest-theme-back{position:fixed;left:14px;top:14px;z-index:92;display:none;padding:5px 10px;border:1px solid #7e8b91;border-radius:12px;background:linear-gradient(#fff,#dce2e5);box-shadow:inset 0 1px #fff,0 2px 3px rgba(0,0,0,.15);font:10px Arial;color:#29404d;cursor:pointer}
+.forest-mode-active .forest-theme-back{display:block}
+.forest-mode-active .daily-dock,.forest-mode-active .top-tabs,.forest-mode-active .subnav{filter:saturate(.92)}
+@media(max-width:760px){.forest-side{width:64px;background-size:65px 92px}.forest-floor{height:36px}}
+
+/* Root-level poster images are packaged with this patch; keep cards stable if one ever fails. */
+.favorite-film.poster-missing:before{content:'poster';display:flex;align-items:center;justify-content:center;width:100%;aspect-ratio:2/3;border:1px solid #777;background:#e7eaec;color:#6e777d;font:9px Arial;text-transform:uppercase;letter-spacing:.08em}

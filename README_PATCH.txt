@@ -1,13 +1,35 @@
-Gustavo Portfolio v17 overlay patch
+GUSTAVO PORTFOLIO V18 LAZY PATCH
 
-Drop these files/folders into the ROOT of your current https://gustavriguez.github.io/Portfolio/ repository and overwrite styles.css + site.js.
+Upload EVERYTHING inside this folder directly into the root of your existing GitHub Portfolio repo.
 
-This patch intentionally DOES NOT include site-data.js, media.html, portfolio-content.js, project-media.js, or any existing project images. That means your current live media edits and your removed/blank-picture cleanup stay intact.
+OVERWRITE:
+- site.js
+- styles.css
 
-Changes in this patch:
-- removes Letterboxd promotion and replaces it with a local Favorite Films button
-- adds Magnolia, Speed Racer, Trainspotting, and Hundreds of Beavers to About
-- bullshark appears only in a small bottom-left beach/ocean/sand/palm scene
-- expanded Tampa live time + current weather + 24h high/low + humidity/wind
-- live 12-hour temperature and rain-probability graphs from Open-Meteo
-- keeps the existing Apple-era site styling and other Gustavo sprites
+ADD / MERGE:
+- sprites/  (includes bear-walk.gif plus the prior Gustavo + bullshark sprites)
+- magnolia.png
+- speed-racer.png
+- trainspotting.png
+- hundreds-of-beavers.png
+
+DO NOT REPLACE:
+- index.html
+- about.html
+- media.html
+- site-data.js
+- project-media.js
+- portfolio-content.js
+- your current project/media images
+
+WHAT THIS PATCH DOES
+- removes the old "shoegaze / on repeat" button
+- removes the old "persona / night shift" button
+- removes the Letterboxd/favorite-films junk button
+- Pokémon / Party Data opens a mini window containing Jirachi, Gible, Eevee, Dragapult, Orbeetle, and Masquerain using PokeAPI sprite URLs
+- Bears / Approved toggles a small pixel bear that walks around the browser
+- Forest Mode adds a translucent forest edge overlay + fireflies and shows a "back" button to return to normal
+- movie posters now load from root-level files instead of the favorite-films subfolder
+- keeps the v17 Tampa live clock/weather + forecast graphs
+- keeps the bullshark only in the bottom-left beach vignette
+- does not touch your current weekly media or gallery data

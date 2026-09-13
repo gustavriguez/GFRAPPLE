@@ -266,10 +266,10 @@ qa('[data-gallery-open]').forEach(el=>el.addEventListener('click',e=>{e.preventD
     shelf.innerHTML=`
       <div class="favorite-films-head"><h3>Favorite films.</h3><span>current four</span></div>
       <div class="favorite-film-grid">
-        <article class="favorite-film"><img src="favorite-films/magnolia.png" alt="Magnolia poster"><b>Magnolia</b><small>1999 · Paul Thomas Anderson</small></article>
-        <article class="favorite-film"><img src="favorite-films/speed-racer.png" alt="Speed Racer poster"><b>Speed Racer</b><small>2008 · The Wachowskis</small></article>
-        <article class="favorite-film"><img src="favorite-films/trainspotting.png" alt="Trainspotting poster"><b>Trainspotting</b><small>1996 · Danny Boyle</small></article>
-        <article class="favorite-film"><img src="favorite-films/hundreds-of-beavers.png" alt="Hundreds of Beavers poster"><b>Hundreds of Beavers</b><small>2022 · Mike Cheslik</small></article>
+        <article class="favorite-film"><img src="magnolia.png" alt="Magnolia poster"><b>Magnolia</b><small>1999 · Paul Thomas Anderson</small></article>
+        <article class="favorite-film"><img src="speed-racer.png" alt="Speed Racer poster"><b>Speed Racer</b><small>2008 · The Wachowskis</small></article>
+        <article class="favorite-film"><img src="trainspotting.png" alt="Trainspotting poster"><b>Trainspotting</b><small>1996 · Danny Boyle</small></article>
+        <article class="favorite-film"><img src="hundreds-of-beavers.png" alt="Hundreds of Beavers poster"><b>Hundreds of Beavers</b><small>2022 · Mike Cheslik</small></article>
       </div>`;
     anchor.insertAdjacentElement('afterend',shelf);
   }
@@ -346,4 +346,138 @@ qa('[data-gallery-open]').forEach(el=>el.addEventListener('click',e=>{e.preventD
   }
 
   addFavoriteFilms(); addBeachShark(); upgradeTampa();
+})();
+
+
+/* --- v18 lazy patch: party window, roaming bear, forest overlay, button cleanup --- */
+(()=>{
+  const q=(s,e=document)=>e.querySelector(s), qa=(s,e=document)=>[...e.querySelectorAll(s)];
+
+  function cleanButtonJunk(){
+    qa('.button-junk-wrap .junk88').forEach(a=>{
+      const txt=(a.textContent||'').toLowerCase().replace(/\s+/g,' ').trim();
+      if(txt.includes('shoegaze') || txt.includes('persona') || txt.includes('letterboxd') || txt.includes('favorite films')){
+        a.remove();
+        return;
+      }
+      if(txt.includes('pokémon') || txt.includes('pokemon')){
+        a.href='#'; a.removeAttribute('target'); a.removeAttribute('rel');
+        a.dataset.junkAction='pokemon';
+        a.innerHTML='<span class="pix">pokémon<br>party data</span>';
+      }
+      if(txt.includes('forest mode')){
+        a.href='#'; a.removeAttribute('target'); a.removeAttribute('rel');
+        a.dataset.junkAction='forest';
+        a.innerHTML='<span class="pix">forest mode<br>ferns + shade</span>';
+      }
+      if(txt.includes('bears')){
+        a.href='#'; a.removeAttribute('target'); a.removeAttribute('rel');
+        a.dataset.junkAction='bear';
+        a.innerHTML='<span class="pix">bears<br>approved</span>';
+      }
+    });
+  }
+
+  const pokemonParty=[
+    {name:'Jirachi',dex:'0385',type:'Steel / Psychic',sprite:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/385.png'},
+    {name:'Gible',dex:'0443',type:'Dragon / Ground',sprite:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/443.png'},
+    {name:'Eevee',dex:'0133',type:'Normal',sprite:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/133.png'},
+    {name:'Dragapult',dex:'0887',type:'Dragon / Ghost',sprite:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/887.png'},
+    {name:'Orbeetle',dex:'0826',type:'Bug / Psychic',sprite:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/826.png'},
+    {name:'Masquerain',dex:'0284',type:'Bug / Flying',sprite:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/284.png'}
+  ];
+
+  function ensurePokemonWindow(){
+    let win=q('.pokemon-party-window');
+    if(win)return win;
+    win=document.createElement('section');
+    win.className='pokemon-party-window';
+    win.setAttribute('role','dialog');
+    win.setAttribute('aria-modal','true');
+    win.setAttribute('aria-label','Pokémon party data');
+    win.innerHTML=`
+      <div class="pokemon-party-titlebar"><b>POKÉMON PARTY DATA</b><button type="button" class="pokemon-party-close" aria-label="Close Pokémon party">×</button></div>
+      <div class="pokemon-party-grid">
+        ${pokemonParty.map(p=>`<article class="pokemon-slot">
+          <div class="pokemon-sprite-frame"><img src="${p.sprite}" alt="${p.name} sprite" loading="lazy"></div>
+          <b>${p.name}</b><small>#${p.dex}</small><span>${p.type}</span>
+        </article>`).join('')}
+      </div>
+      <div class="pokemon-party-foot">sprite source · PokeAPI</div>`;
+    document.body.appendChild(win);
+    q('.pokemon-party-close',win).addEventListener('click',()=>win.classList.remove('open'));
+    win.addEventListener('click',e=>{if(e.target===win)win.classList.remove('open')});
+    return win;
+  }
+
+  function openPokemonParty(){ensurePokemonWindow().classList.add('open')}
+
+  function ensureBear(){
+    let bear=q('.roaming-bear');
+    if(bear)return bear;
+    bear=document.createElement('div');
+    bear.className='roaming-bear';
+    bear.setAttribute('aria-hidden','true');
+    bear.innerHTML='<img src="sprites/bear-walk.gif" alt="">';
+    document.body.appendChild(bear);
+    return bear;
+  }
+  function toggleBear(){
+    const bear=ensureBear();
+    bear.classList.toggle('awake');
+    if(bear.classList.contains('awake')){
+      bear.classList.remove('restart'); void bear.offsetWidth; bear.classList.add('restart');
+    }
+  }
+
+  function ensureForest(){
+    let forest=q('.forest-overlay');
+    if(forest)return forest;
+    forest=document.createElement('div');
+    forest.className='forest-overlay';
+    forest.setAttribute('aria-hidden','true');
+    forest.innerHTML='<div class="forest-side forest-left"></div><div class="forest-side forest-right"></div><div class="forest-floor"></div><div class="forest-fireflies"><i></i><i></i><i></i><i></i><i></i></div>';
+    document.body.appendChild(forest);
+    const back=document.createElement('button');
+    back.type='button';back.className='forest-theme-back';back.textContent='← back';back.setAttribute('aria-label','Turn off forest theme');
+    back.addEventListener('click',disableForest);
+    document.body.appendChild(back);
+    return forest;
+  }
+  function enableForest(){ensureForest();document.body.classList.add('forest-mode-active')}
+  function disableForest(){document.body.classList.remove('forest-mode-active')}
+
+  function fixFilmPosters(){
+    const rootNames={
+      'Magnolia':'magnolia.png',
+      'Speed Racer':'speed-racer.png',
+      'Trainspotting':'trainspotting.png',
+      'Hundreds of Beavers':'hundreds-of-beavers.png'
+    };
+    qa('.favorite-film').forEach(card=>{
+      const title=q('b',card)?.textContent?.trim(); const img=q('img',card);
+      if(img && rootNames[title]){
+        img.src=rootNames[title];
+        img.onerror=()=>{img.style.display='none';card.classList.add('poster-missing')};
+      }
+    });
+  }
+
+  function wireActions(){
+    cleanButtonJunk();
+    qa('[data-junk-action]').forEach(a=>{
+      if(a.dataset.v18Wired)return; a.dataset.v18Wired='1';
+      a.addEventListener('click',e=>{
+        e.preventDefault();
+        if(a.dataset.junkAction==='pokemon')openPokemonParty();
+        if(a.dataset.junkAction==='bear')toggleBear();
+        if(a.dataset.junkAction==='forest')enableForest();
+      });
+    });
+    fixFilmPosters();
+  }
+
+  // Run after previous add-ons finish building the existing page.
+  wireActions();
+  requestAnimationFrame(wireActions);
 })();
