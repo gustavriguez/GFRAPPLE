@@ -1,35 +1,23 @@
-GUSTAVO PORTFOLIO V18 LAZY PATCH
+GUSTAVO PORTFOLIO V19 CLEANUP PATCH
 
-Upload EVERYTHING inside this folder directly into the root of your existing GitHub Portfolio repo.
+Upload EVERYTHING in this folder directly into the root of your Portfolio repo.
 
-OVERWRITE:
+Overwrite:
 - site.js
 - styles.css
 
-ADD / MERGE:
-- sprites/  (includes bear-walk.gif plus the prior Gustavo + bullshark sprites)
+Keep/add:
 - magnolia.png
 - speed-racer.png
 - trainspotting.png
 - hundreds-of-beavers.png
+- sprites/ (existing sprite assets; bear-walk.gif is intentionally removed)
 
-DO NOT REPLACE:
-- index.html
-- about.html
-- media.html
-- site-data.js
-- project-media.js
-- portfolio-content.js
-- your current project/media images
+Changes:
+- removes Bears / approved button and roaming bear behavior
+- removes Forest mode button, forest overlay, and theme-back button
+- keeps Pokémon / party data only
+- fixes Pokémon modal so title bar, grid, and footer are one centered Aqua-style window
+- keeps posters, Tampa live module, current media, project galleries, and beach bullshark behavior from prior patches
 
-WHAT THIS PATCH DOES
-- removes the old "shoegaze / on repeat" button
-- removes the old "persona / night shift" button
-- removes the Letterboxd/favorite-films junk button
-- Pokémon / Party Data opens a mini window containing Jirachi, Gible, Eevee, Dragapult, Orbeetle, and Masquerain using PokeAPI sprite URLs
-- Bears / Approved toggles a small pixel bear that walks around the browser
-- Forest Mode adds a translucent forest edge overlay + fireflies and shows a "back" button to return to normal
-- movie posters now load from root-level files instead of the favorite-films subfolder
-- keeps the v17 Tampa live clock/weather + forecast graphs
-- keeps the bullshark only in the bottom-left beach vignette
-- does not touch your current weekly media or gallery data
+This patch does NOT replace site-data.js, media.html, project-media.js, portfolio-content.js, or your existing updated content.

@@ -349,14 +349,17 @@ qa('[data-gallery-open]').forEach(el=>el.addEventListener('click',e=>{e.preventD
 })();
 
 
-/* --- v18 lazy patch: party window, roaming bear, forest overlay, button cleanup --- */
+/* --- v19 cleanup patch: Pokémon-only interaction, no forest/bear modes --- */
 (()=>{
   const q=(s,e=document)=>e.querySelector(s), qa=(s,e=document)=>[...e.querySelectorAll(s)];
 
   function cleanButtonJunk(){
     qa('.button-junk-wrap .junk88').forEach(a=>{
       const txt=(a.textContent||'').toLowerCase().replace(/\s+/g,' ').trim();
-      if(txt.includes('shoegaze') || txt.includes('persona') || txt.includes('letterboxd') || txt.includes('favorite films')){
+      if(
+        txt.includes('shoegaze') || txt.includes('persona') || txt.includes('letterboxd') ||
+        txt.includes('favorite films') || txt.includes('forest mode') || txt.includes('bears')
+      ){
         a.remove();
         return;
       }
@@ -364,16 +367,6 @@ qa('[data-gallery-open]').forEach(el=>el.addEventListener('click',e=>{e.preventD
         a.href='#'; a.removeAttribute('target'); a.removeAttribute('rel');
         a.dataset.junkAction='pokemon';
         a.innerHTML='<span class="pix">pokémon<br>party data</span>';
-      }
-      if(txt.includes('forest mode')){
-        a.href='#'; a.removeAttribute('target'); a.removeAttribute('rel');
-        a.dataset.junkAction='forest';
-        a.innerHTML='<span class="pix">forest mode<br>ferns + shade</span>';
-      }
-      if(txt.includes('bears')){
-        a.href='#'; a.removeAttribute('target'); a.removeAttribute('rel');
-        a.dataset.junkAction='bear';
-        a.innerHTML='<span class="pix">bears<br>approved</span>';
       }
     });
   }
@@ -396,56 +389,29 @@ qa('[data-gallery-open]').forEach(el=>el.addEventListener('click',e=>{e.preventD
     win.setAttribute('aria-modal','true');
     win.setAttribute('aria-label','Pokémon party data');
     win.innerHTML=`
-      <div class="pokemon-party-titlebar"><b>POKÉMON PARTY DATA</b><button type="button" class="pokemon-party-close" aria-label="Close Pokémon party">×</button></div>
-      <div class="pokemon-party-grid">
-        ${pokemonParty.map(p=>`<article class="pokemon-slot">
-          <div class="pokemon-sprite-frame"><img src="${p.sprite}" alt="${p.name} sprite" loading="lazy"></div>
-          <b>${p.name}</b><small>#${p.dex}</small><span>${p.type}</span>
-        </article>`).join('')}
-      </div>
-      <div class="pokemon-party-foot">sprite source · PokeAPI</div>`;
+      <div class="pokemon-party-dialog">
+        <div class="pokemon-party-titlebar">
+          <div class="pokemon-party-title"><span class="pokemon-ball-dot" aria-hidden="true"></span><b>POKÉMON PARTY DATA</b></div>
+          <button type="button" class="pokemon-party-close" aria-label="Close Pokémon party">×</button>
+        </div>
+        <div class="pokemon-party-subbar"><span>ACTIVE PARTY</span><span>6 / 6</span></div>
+        <div class="pokemon-party-grid">
+          ${pokemonParty.map((p,i)=>`<article class="pokemon-slot">
+            <div class="pokemon-sprite-frame"><img src="${p.sprite}" alt="${p.name} sprite" loading="lazy"></div>
+            <div class="pokemon-slot-copy"><b>${p.name}</b><small>#${p.dex}</small><span>${p.type}</span></div>
+          </article>`).join('')}
+        </div>
+        <div class="pokemon-party-foot"><span>party data · local portfolio widget</span><span>sprites · PokeAPI</span></div>
+      </div>`;
     document.body.appendChild(win);
-    q('.pokemon-party-close',win).addEventListener('click',()=>win.classList.remove('open'));
-    win.addEventListener('click',e=>{if(e.target===win)win.classList.remove('open')});
+    const close=()=>win.classList.remove('open');
+    q('.pokemon-party-close',win).addEventListener('click',close);
+    win.addEventListener('click',e=>{if(e.target===win)close()});
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&win.classList.contains('open'))close()});
     return win;
   }
 
   function openPokemonParty(){ensurePokemonWindow().classList.add('open')}
-
-  function ensureBear(){
-    let bear=q('.roaming-bear');
-    if(bear)return bear;
-    bear=document.createElement('div');
-    bear.className='roaming-bear';
-    bear.setAttribute('aria-hidden','true');
-    bear.innerHTML='<img src="sprites/bear-walk.gif" alt="">';
-    document.body.appendChild(bear);
-    return bear;
-  }
-  function toggleBear(){
-    const bear=ensureBear();
-    bear.classList.toggle('awake');
-    if(bear.classList.contains('awake')){
-      bear.classList.remove('restart'); void bear.offsetWidth; bear.classList.add('restart');
-    }
-  }
-
-  function ensureForest(){
-    let forest=q('.forest-overlay');
-    if(forest)return forest;
-    forest=document.createElement('div');
-    forest.className='forest-overlay';
-    forest.setAttribute('aria-hidden','true');
-    forest.innerHTML='<div class="forest-side forest-left"></div><div class="forest-side forest-right"></div><div class="forest-floor"></div><div class="forest-fireflies"><i></i><i></i><i></i><i></i><i></i></div>';
-    document.body.appendChild(forest);
-    const back=document.createElement('button');
-    back.type='button';back.className='forest-theme-back';back.textContent='← back';back.setAttribute('aria-label','Turn off forest theme');
-    back.addEventListener('click',disableForest);
-    document.body.appendChild(back);
-    return forest;
-  }
-  function enableForest(){ensureForest();document.body.classList.add('forest-mode-active')}
-  function disableForest(){document.body.classList.remove('forest-mode-active')}
 
   function fixFilmPosters(){
     const rootNames={
@@ -465,19 +431,17 @@ qa('[data-gallery-open]').forEach(el=>el.addEventListener('click',e=>{e.preventD
 
   function wireActions(){
     cleanButtonJunk();
-    qa('[data-junk-action]').forEach(a=>{
-      if(a.dataset.v18Wired)return; a.dataset.v18Wired='1';
-      a.addEventListener('click',e=>{
-        e.preventDefault();
-        if(a.dataset.junkAction==='pokemon')openPokemonParty();
-        if(a.dataset.junkAction==='bear')toggleBear();
-        if(a.dataset.junkAction==='forest')enableForest();
-      });
+    qa('[data-junk-action="pokemon"]').forEach(a=>{
+      if(a.dataset.v19Wired)return; a.dataset.v19Wired='1';
+      a.addEventListener('click',e=>{e.preventDefault();openPokemonParty()});
     });
     fixFilmPosters();
   }
 
-  // Run after previous add-ons finish building the existing page.
+  // Clean up any stale DOM injected by older local versions if a hot reload leaves it behind.
+  qa('.roaming-bear,.forest-overlay,.forest-theme-back').forEach(el=>el.remove());
+  document.body.classList.remove('forest-mode-active');
+
   wireActions();
   requestAnimationFrame(wireActions);
 })();
