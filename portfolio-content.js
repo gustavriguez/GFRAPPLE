@@ -164,16 +164,9 @@ window.PORTFOLIO_CONTENT = {
         "img-018.png",
         "img-019.png",
         "img-020.png",
-        "img-021.png",
-        "img-022.png",
         "img-023.png",
         "img-024.png",
-        "img-025.png",
-        "img-026.png",
-        "img-027.png",
-        "img-028.png",
-        "img-029.png",
-        "img-030.png"
+        "img-025.png"
       ],
       "pdf": "steam-locomotive-cad-project.pdf",
       "pdfText": "Open full CAD project PDF ›"
