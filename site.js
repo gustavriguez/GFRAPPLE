@@ -139,3 +139,211 @@ function renderGallery(){
 }
 qa('[data-gallery-open]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();openGallery(el.dataset.galleryOpen)}));
 })();
+
+/* Pixel sprite add-on. This intentionally leaves the original Apple-style layout intact. */
+(()=>{
+  const page=document.body?.dataset?.page||'';
+  const $=(s,e=document)=>e.querySelector(s);
+  const el=(tag,cls)=>{const n=document.createElement(tag);if(cls)n.className=cls;return n};
+
+  const spriteForPage={
+    home:['wave','sprites/gustavo-wave.gif'],
+    about:['wave','sprites/gustavo-wave.gif'],
+    projects:['drill','sprites/gustavo-drill.gif'],
+    work:['idle','sprites/gustavo-idle.gif'],
+    media:['weather','sprites/gustavo-weather.gif'],
+    assets:['shark','sprites/bullshark-swim.gif'],
+    resume:['idle','sprites/gustavo-idle.gif'],
+    contact:['wave','sprites/gustavo-wave.gif']
+  };
+
+  function addFloatingSprite(){
+    if(page!=='home')return;
+    const conf=spriteForPage[page]; if(!conf)return;
+    const layer=el('div','pixel-sprite-layer');
+    const s=el('div','pixel-sprite '+conf[0]);
+    const i=new Image(); i.src=conf[1]; i.alt=''; i.setAttribute('aria-hidden','true');
+    s.appendChild(i); layer.appendChild(s);
+    const sh=el('div','pixel-sprite shark'); const si=new Image(); si.src='sprites/bullshark-swim.gif';si.alt='';si.setAttribute('aria-hidden','true');sh.appendChild(si);layer.appendChild(sh);
+    document.body.appendChild(layer);
+  }
+
+  function decorateDailyCards(){
+    const left=$('.daily-dock.left .daily-card');
+    if(left && !left.querySelector('.daily-sprite-strip')){
+      const strip=el('div','daily-sprite-strip shark-strip');
+      strip.innerHTML='<img src="sprites/bullshark-swim.gif" alt="" aria-hidden="true">';
+      const status=left.querySelector('.daily-status');
+      left.insertBefore(strip,status||null);
+    }
+    const right=$('.daily-dock.right .daily-card');
+    if(right && !right.querySelector('.tampa-mini')){
+      const w=el('div','tampa-mini');
+      w.innerHTML='<div><small>TAMPA TIME</small><br><strong data-tampa-time>--:--</strong></div><img class="sprite-weather-mini" src="sprites/gustavo-weather.gif" alt="" aria-hidden="true"><div><small>WEATHER</small><br><strong data-tampa-weather>checking…</strong></div>';
+      const status=right.querySelector('.daily-status');
+      right.insertBefore(w,status||null);
+      updateTampa(w);
+    }
+  }
+
+  function updateTime(root){
+    const target=root.querySelector('[data-tampa-time]'); if(!target)return;
+    const now=new Date();
+    target.textContent=new Intl.DateTimeFormat('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/New_York'}).format(now);
+  }
+  async function updateTampa(root){
+    updateTime(root);setInterval(()=>updateTime(root),30000);
+    const out=root.querySelector('[data-tampa-weather]');
+    try{
+      const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=27.9506&longitude=-82.4572&current=temperature_2m,weather_code&temperature_unit=fahrenheit&timezone=America%2FNew_York');
+      const j=await r.json();
+      const map={0:'clear',1:'mostly clear',2:'partly cloudy',3:'overcast',45:'fog',48:'fog',51:'drizzle',53:'drizzle',55:'drizzle',61:'light rain',63:'rain',65:'heavy rain',80:'showers',81:'showers',82:'heavy showers',95:'storm'};
+      out.textContent=Math.round(j.current.temperature_2m)+'° · '+(map[j.current.weather_code]||'outside');
+    }catch(e){out.textContent='Tampa, FL';}
+  }
+
+  function addSectionBadge(){
+    const title=$('.section-title'); if(!title || title.parentElement.querySelector('.section-sprite-badge'))return;
+    const conf=spriteForPage[page]; if(!conf)return;
+    const badge=el('span','section-sprite-badge');
+    badge.innerHTML='<img src="'+conf[1]+'" alt="" aria-hidden="true">';
+    title.parentElement.insertBefore(badge,title);
+  }
+
+  function addButtonJunk(){
+    if($('.button-junk-wrap'))return;
+    const footer=$('.footer'); if(!footer)return;
+    const wrap=el('div','button-junk-wrap');
+    const items=[
+      ['https://www.last.fm/user/guub33','last.fm','guub33'],
+      ['https://letterboxd.com/guub33/','letterboxd','guub33'],
+      ['https://www.linkedin.com/in/gustavo33','linkedin','gustavo33'],
+      ['mailto:gustavorodriguez@usf.edu','email me','@usf.edu'],
+      ['#','persona','night shift'],
+      ['#','pokémon','party data'],
+      ['#','forest mode','ferns + shade'],
+      ['#','bears','approved'],
+      ['projects.html','robotics','+ bionics'],
+      ['media.html','shoegaze','on repeat']
+    ];
+    items.forEach(([href,a,b])=>{
+      const x=document.createElement('a');x.className='junk88';x.href=href;if(/^https/.test(href)){x.target='_blank';x.rel='noopener'}
+      x.innerHTML='<span class="pix">'+a+'<br>'+b+'</span>';wrap.appendChild(x);
+    });
+    footer.parentNode.insertBefore(wrap,footer);
+  }
+
+  addFloatingSprite();
+  decorateDailyCards();
+  addSectionBadge();
+  addButtonJunk();
+})();
+
+
+/* --- v17 live-overlay update. Keeps SITE_DATA / media edits untouched. --- */
+(()=>{
+  const q=(s,e=document)=>e.querySelector(s), qa=(s,e=document)=>[...e.querySelectorAll(s)];
+  const page=document.body?.dataset?.page||'';
+
+  // Remove every older shark placement; the beach vignette below is the only shark location.
+  qa('.pixel-sprite.shark,.daily-sprite-strip.shark-strip').forEach(el=>el.remove());
+  qa('.section-sprite-badge img[src*="bullshark"]').forEach(img=>img.closest('.section-sprite-badge')?.remove());
+
+  // Letterboxd is no longer promoted/tagged. Replace the old 88x31 button with a local favorites link.
+  qa('.button-junk-wrap a').forEach(a=>{
+    if((a.href||'').toLowerCase().includes('letterboxd')){
+      a.href='about.html#favorite-films';
+      a.removeAttribute('target'); a.removeAttribute('rel');
+      a.innerHTML='<span class="pix">favorite films<br>four on repeat</span>';
+    }
+  });
+
+  function addFavoriteFilms(){
+    if(page!=='about' || q('#favorite-films'))return;
+    const anchor=q('.about-stats')||q('.about-photo-grid'); if(!anchor)return;
+    const shelf=document.createElement('section');
+    shelf.className='favorite-films'; shelf.id='favorite-films';
+    shelf.innerHTML=`
+      <div class="favorite-films-head"><h3>Favorite films.</h3><span>current four</span></div>
+      <div class="favorite-film-grid">
+        <article class="favorite-film"><img src="favorite-films/magnolia.png" alt="Magnolia poster"><b>Magnolia</b><small>1999 · Paul Thomas Anderson</small></article>
+        <article class="favorite-film"><img src="favorite-films/speed-racer.png" alt="Speed Racer poster"><b>Speed Racer</b><small>2008 · The Wachowskis</small></article>
+        <article class="favorite-film"><img src="favorite-films/trainspotting.png" alt="Trainspotting poster"><b>Trainspotting</b><small>1996 · Danny Boyle</small></article>
+        <article class="favorite-film"><img src="favorite-films/hundreds-of-beavers.png" alt="Hundreds of Beavers poster"><b>Hundreds of Beavers</b><small>2022 · Mike Cheslik</small></article>
+      </div>`;
+    anchor.insertAdjacentElement('afterend',shelf);
+  }
+
+  function addBeachShark(){
+    if(q('.beach-shark-scene'))return;
+    const s=document.createElement('div');
+    s.className='beach-shark-scene'; s.setAttribute('aria-hidden','true');
+    s.innerHTML='<div class="beach-sky"></div><div class="beach-ocean"><img class="beach-shark" src="sprites/bullshark-swim.gif" alt=""></div><div class="beach-sand"></div><div class="beach-palm"></div><div class="beach-palm-frond"></div>';
+    document.body.appendChild(s);
+  }
+
+  function weatherLabel(code){
+    const m={0:'Clear',1:'Mostly clear',2:'Partly cloudy',3:'Overcast',45:'Fog',48:'Fog',51:'Light drizzle',53:'Drizzle',55:'Heavy drizzle',61:'Light rain',63:'Rain',65:'Heavy rain',71:'Light snow',80:'Rain showers',81:'Showers',82:'Heavy showers',95:'Thunderstorms',96:'Storms + hail',99:'Storms + hail'};
+    return m[code]||'Tampa weather';
+  }
+  function fmtClock(){return new Intl.DateTimeFormat('en-US',{hour:'numeric',minute:'2-digit',second:'2-digit',timeZone:'America/New_York'}).format(new Date())}
+  function fmtDate(){return new Intl.DateTimeFormat('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric',timeZone:'America/New_York'}).format(new Date())}
+  function fmtHour(iso){
+    const d=new Date(iso+(/Z|[+-]\d\d:\d\d$/.test(iso)?'':'-04:00'));
+    return new Intl.DateTimeFormat('en-US',{hour:'numeric',timeZone:'America/New_York'}).format(d);
+  }
+  function lineSvg(values, labels, type){
+    const W=176,H=48,pL=5,pR=5,pT=5,pB=12;
+    const nums=values.map(v=>Number(v)||0); let lo=Math.min(...nums), hi=Math.max(...nums);
+    if(type==='rain'){lo=0;hi=100}else if(hi-lo<3){lo-=1.5;hi+=1.5}
+    const x=i=>pL+(W-pL-pR)*(i/Math.max(1,nums.length-1));
+    const y=v=>pT+(H-pT-pB)*(1-(v-lo)/Math.max(.001,hi-lo));
+    const pts=nums.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+    const cls=type==='rain'?'tampa-chart-rain':'tampa-chart-line';
+    const dots=nums.map((v,i)=> i%3===0?`<circle class="tampa-chart-dot" cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="1.5"></circle>`:'').join('');
+    const indexes=[0,Math.floor((nums.length-1)/2),nums.length-1];
+    const labs=indexes.map(i=>`<text class="tampa-axis" x="${x(i).toFixed(1)}" y="46" text-anchor="${i===0?'start':i===nums.length-1?'end':'middle'}">${labels[i]||''}</text>`).join('');
+    return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${type==='rain'?'Rain probability':'Temperature'} forecast graph"><line class="tampa-chart-grid" x1="5" y1="18" x2="171" y2="18"></line><line class="tampa-chart-grid" x1="5" y1="32" x2="171" y2="32"></line><polyline class="${cls}" points="${pts}"></polyline>${dots}${labs}</svg>`;
+  }
+
+  function upgradeTampa(){
+    const card=q('.daily-dock.right .daily-card'); if(!card)return;
+    q('.tampa-mini',card)?.remove();
+    if(q('.tampa-live',card))return;
+    const live=document.createElement('section'); live.className='tampa-live';
+    live.innerHTML=`
+      <div class="tampa-live-head"><div><small>Tampa time · live</small><div class="tampa-live-clock" data-tampa-clock>--:--:--</div><div class="tampa-live-date" data-tampa-date></div></div><img class="tampa-live-sprite" src="sprites/gustavo-weather.gif" alt="" aria-hidden="true"></div>
+      <div class="tampa-current"><div class="tampa-temp" data-live-temp>--°</div><div><div class="tampa-condition" data-live-condition>loading forecast…</div><div class="tampa-feels" data-live-feels>Open-Meteo connection</div></div></div>
+      <div class="tampa-metrics"><div class="tampa-metric"><small>Humidity</small><strong data-live-humidity>--%</strong></div><div class="tampa-metric"><small>Wind</small><strong data-live-wind>-- mph</strong></div><div class="tampa-metric"><small>24h high</small><strong data-live-high>--°</strong></div><div class="tampa-metric"><small>24h low</small><strong data-live-low>--°</strong></div></div>
+      <div class="tampa-chart"><div class="tampa-chart-head"><b>temperature · next 12h</b><span data-temp-range></span></div><div data-temp-chart></div></div>
+      <div class="tampa-chart"><div class="tampa-chart-head"><b>rain chance · next 12h</b><span data-rain-max></span></div><div data-rain-chart></div></div>
+      <div class="tampa-source">Forecast data: <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> · Tampa, FL</div>`;
+    const status=q('.daily-status',card); card.insertBefore(live,status||null);
+    const tick=()=>{q('[data-tampa-clock]',live).textContent=fmtClock();q('[data-tampa-date]',live).textContent=fmtDate()}; tick(); setInterval(tick,1000);
+
+    const url='https://api.open-meteo.com/v1/forecast?latitude=27.9506&longitude=-82.4572&current=temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m&hourly=temperature_2m,precipitation_probability,relative_humidity_2m&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=America%2FNew_York&forecast_hours=24';
+    fetch(url).then(r=>{if(!r.ok)throw new Error('weather');return r.json()}).then(j=>{
+      const c=j.current||{}, h=j.hourly||{};
+      q('[data-live-temp]',live).textContent=Math.round(c.temperature_2m)+'°';
+      q('[data-live-condition]',live).textContent=weatherLabel(c.weather_code);
+      q('[data-live-feels]',live).textContent='Feels like '+Math.round(c.apparent_temperature)+'°';
+      q('[data-live-humidity]',live).textContent=Math.round(c.relative_humidity_2m)+'%';
+      q('[data-live-wind]',live).textContent=Math.round(c.wind_speed_10m)+' mph';
+      const temps=(h.temperature_2m||[]).map(Number), rain=(h.precipitation_probability||[]).map(v=>Number(v)||0), times=(h.time||[]);
+      if(temps.length){q('[data-live-high]',live).textContent=Math.round(Math.max(...temps))+'°';q('[data-live-low]',live).textContent=Math.round(Math.min(...temps))+'°'}
+      const n=Math.min(12,temps.length,rain.length,times.length); const labels=times.slice(0,n).map(fmtHour);
+      const t12=temps.slice(0,n), r12=rain.slice(0,n);
+      q('[data-temp-chart]',live).innerHTML=lineSvg(t12,labels,'temp');
+      q('[data-rain-chart]',live).innerHTML=lineSvg(r12,labels,'rain');
+      if(t12.length)q('[data-temp-range]',live).textContent=Math.round(Math.min(...t12))+'–'+Math.round(Math.max(...t12))+'°F';
+      if(r12.length)q('[data-rain-max]',live).textContent='max '+Math.round(Math.max(...r12))+'%';
+    }).catch(()=>{
+      q('[data-live-condition]',live).textContent='Live forecast unavailable';
+      q('[data-live-feels]',live).textContent='Time still updates locally';
+      q('[data-temp-chart]',live).innerHTML='<div class="small-print">forecast graph loads when the weather API is reachable</div>';
+      q('[data-rain-chart]',live).innerHTML='<div class="small-print">no cached weather values used</div>';
+    });
+  }
+
+  addFavoriteFilms(); addBeachShark(); upgradeTampa();
+})();
