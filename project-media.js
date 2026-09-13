@@ -6,37 +6,37 @@ window.PROJECT_GALLERIES = {
         "type": "youtube",
         "src": "https://www.youtube.com/shorts/QDIRQ6DCv78",
         "alt": "Mime demonstration video 1",
-        "caption": "Mime demonstration \u00b7 Video 01"
+        "caption": "Mime demonstration · Video 01"
       },
       {
         "type": "youtube",
         "src": "https://www.youtube.com/shorts/n4hkNeBJoO0",
         "alt": "Mime demonstration video 2",
-        "caption": "Mime demonstration \u00b7 Video 02"
+        "caption": "Mime demonstration · Video 02"
       },
       {
         "type": "image",
         "src": "mime-mime-access-screen.png",
         "alt": "Mime V1.1 joint control access screen",
-        "caption": "Mime V1.1 \u00b7 Joint control access screen."
+        "caption": "Mime V1.1 · Joint control access screen."
       },
       {
         "type": "image",
         "src": "mime-mime-control-menu.png",
         "alt": "Mime control menu with output mode, input source, calibration, and toggles",
-        "caption": "Control menu \u00b7 Output mode, input source, calibration, and toggles."
+        "caption": "Control menu · Output mode, input source, calibration, and toggles."
       },
       {
         "type": "image",
         "src": "mime-mime-open-hand.png",
         "alt": "Mime camera tracking an open hand with finger landmarks and control indicators",
-        "caption": "Computer-vision input \u00b7 Open hand, finger landmarks, and live control indicators."
+        "caption": "Computer-vision input · Open hand, finger landmarks, and live control indicators."
       },
       {
         "type": "image",
         "src": "mime-mime-closed-hand.png",
         "alt": "Mime camera tracking a closed hand in four-position output mode",
-        "caption": "Computer-vision input \u00b7 Closed hand in 4POS output mode."
+        "caption": "Computer-vision input · Closed hand in 4POS output mode."
       }
     ]
   },
@@ -82,147 +82,188 @@ window.PROJECT_GALLERIES = {
         "type": "image",
         "src": "img-000.png",
         "alt": "Steam locomotive CAD image 1",
-        "caption": "Steam locomotive CAD archive \u00b7 image 01"
+        "caption": "Steam locomotive CAD archive · image 01"
       },
       {
         "type": "image",
         "src": "img-001.png",
         "alt": "Steam locomotive CAD image 2",
-        "caption": "Steam locomotive CAD archive \u00b7 image 02"
+        "caption": "Steam locomotive CAD archive · image 02"
       },
       {
         "type": "image",
         "src": "img-002.png",
         "alt": "Steam locomotive CAD image 3",
-        "caption": "Steam locomotive CAD archive \u00b7 image 03"
+        "caption": "Steam locomotive CAD archive · image 03"
       },
       {
         "type": "image",
         "src": "img-003.png",
         "alt": "Steam locomotive CAD image 4",
-        "caption": "Steam locomotive CAD archive \u00b7 image 04"
+        "caption": "Steam locomotive CAD archive · image 04"
       },
       {
         "type": "image",
         "src": "img-004.png",
         "alt": "Steam locomotive CAD image 5",
-        "caption": "Steam locomotive CAD archive \u00b7 image 05"
+        "caption": "Steam locomotive CAD archive · image 05"
       },
       {
         "type": "image",
         "src": "img-005.png",
         "alt": "Steam locomotive CAD image 6",
-        "caption": "Steam locomotive CAD archive \u00b7 image 06"
+        "caption": "Steam locomotive CAD archive · image 06"
       },
       {
         "type": "image",
         "src": "img-006.png",
         "alt": "Steam locomotive CAD image 7",
-        "caption": "Steam locomotive CAD archive \u00b7 image 07"
+        "caption": "Steam locomotive CAD archive · image 07"
       },
       {
         "type": "image",
         "src": "img-007.png",
         "alt": "Steam locomotive CAD image 8",
-        "caption": "Steam locomotive CAD archive \u00b7 image 08"
+        "caption": "Steam locomotive CAD archive · image 08"
       },
       {
         "type": "image",
         "src": "img-008.png",
         "alt": "Steam locomotive CAD image 9",
-        "caption": "Steam locomotive CAD archive \u00b7 image 09"
+        "caption": "Steam locomotive CAD archive · image 09"
       },
       {
         "type": "image",
         "src": "img-009.png",
         "alt": "Steam locomotive CAD image 10",
-        "caption": "Steam locomotive CAD archive \u00b7 image 10"
+        "caption": "Steam locomotive CAD archive · image 10"
       },
       {
         "type": "image",
         "src": "img-010.png",
         "alt": "Steam locomotive CAD image 11",
-        "caption": "Steam locomotive CAD archive \u00b7 image 11"
+        "caption": "Steam locomotive CAD archive · image 11"
       },
       {
         "type": "image",
         "src": "img-011.png",
         "alt": "Steam locomotive CAD image 12",
-        "caption": "Steam locomotive CAD archive \u00b7 image 12"
+        "caption": "Steam locomotive CAD archive · image 12"
       },
       {
         "type": "image",
         "src": "img-012.png",
         "alt": "Steam locomotive CAD image 13",
-        "caption": "Steam locomotive CAD archive \u00b7 image 13"
+        "caption": "Steam locomotive CAD archive · image 13"
       },
       {
         "type": "image",
         "src": "img-013.png",
         "alt": "Steam locomotive CAD image 14",
-        "caption": "Steam locomotive CAD archive \u00b7 image 14"
+        "caption": "Steam locomotive CAD archive · image 14"
+      },
+      {
+        "type": "image",
+        "src": "img-014.png",
+        "alt": "Steam locomotive CAD image 15",
+        "caption": "Steam locomotive CAD archive · image 15"
       },
       {
         "type": "image",
         "src": "img-015.png",
         "alt": "Steam locomotive CAD image 16",
-        "caption": "Steam locomotive CAD archive \u00b7 image 16"
+        "caption": "Steam locomotive CAD archive · image 16"
       },
       {
         "type": "image",
         "src": "img-016.png",
         "alt": "Steam locomotive CAD image 17",
-        "caption": "Steam locomotive CAD archive \u00b7 image 17"
+        "caption": "Steam locomotive CAD archive · image 17"
       },
       {
         "type": "image",
         "src": "img-017.png",
         "alt": "Steam locomotive CAD image 18",
-        "caption": "Steam locomotive CAD archive \u00b7 image 18"
+        "caption": "Steam locomotive CAD archive · image 18"
       },
       {
         "type": "image",
         "src": "img-018.png",
         "alt": "Steam locomotive CAD image 19",
-        "caption": "Steam locomotive CAD archive \u00b7 image 19"
+        "caption": "Steam locomotive CAD archive · image 19"
       },
       {
         "type": "image",
         "src": "img-019.png",
         "alt": "Steam locomotive CAD image 20",
-        "caption": "Steam locomotive CAD archive \u00b7 image 20"
+        "caption": "Steam locomotive CAD archive · image 20"
       },
       {
         "type": "image",
         "src": "img-020.png",
         "alt": "Steam locomotive CAD image 21",
-        "caption": "Steam locomotive CAD archive \u00b7 image 21"
+        "caption": "Steam locomotive CAD archive · image 21"
       },
       {
         "type": "image",
         "src": "img-021.png",
         "alt": "Steam locomotive CAD image 22",
-        "caption": "Steam locomotive CAD archive \u00b7 image 22"
+        "caption": "Steam locomotive CAD archive · image 22"
       },
       {
         "type": "image",
         "src": "img-022.png",
         "alt": "Steam locomotive CAD image 23",
-        "caption": "Steam locomotive CAD archive \u00b7 image 23"
+        "caption": "Steam locomotive CAD archive · image 23"
       },
       {
         "type": "image",
         "src": "img-023.png",
         "alt": "Steam locomotive CAD image 24",
-        "caption": "Steam locomotive CAD archive \u00b7 image 24"
+        "caption": "Steam locomotive CAD archive · image 24"
       },
       {
         "type": "image",
         "src": "img-024.png",
         "alt": "Steam locomotive CAD image 25",
-        "caption": "Steam locomotive CAD archive \u00b7 image 25"
+        "caption": "Steam locomotive CAD archive · image 25"
+      },
+      {
+        "type": "image",
+        "src": "img-025.png",
+        "alt": "Steam locomotive CAD image 26",
+        "caption": "Steam locomotive CAD archive · image 26"
+      },
+      {
+        "type": "image",
+        "src": "img-026.png",
+        "alt": "Steam locomotive CAD image 27",
+        "caption": "Steam locomotive CAD archive · image 27"
+      },
+      {
+        "type": "image",
+        "src": "img-027.png",
+        "alt": "Steam locomotive CAD image 28",
+        "caption": "Steam locomotive CAD archive · image 28"
+      },
+      {
+        "type": "image",
+        "src": "img-028.png",
+        "alt": "Steam locomotive CAD image 29",
+        "caption": "Steam locomotive CAD archive · image 29"
+      },
+      {
+        "type": "image",
+        "src": "img-029.png",
+        "alt": "Steam locomotive CAD image 30",
+        "caption": "Steam locomotive CAD archive · image 30"
+      },
+      {
+        "type": "image",
+        "src": "img-030.png",
+        "alt": "Steam locomotive CAD image 31",
+        "caption": "Steam locomotive CAD archive · image 31"
       }
-
     ]
   },
   "shape-fight": {
@@ -238,43 +279,43 @@ window.PROJECT_GALLERIES = {
         "type": "image",
         "src": "shape-fight-shape-184612.png",
         "alt": "Arena with two triangle characters",
-        "caption": "Two-player arena \u00b7 Triangle characters."
+        "caption": "Two-player arena · Triangle characters."
       },
       {
         "type": "image",
         "src": "shape-fight-shape-184659.png",
         "alt": "MATLAB editor beside the running game and attack indicators",
-        "caption": "Game execution \u00b7 MATLAB source and active combat state."
+        "caption": "Game execution · MATLAB source and active combat state."
       },
       {
         "type": "image",
         "src": "shape-fight-shape-184708.png",
         "alt": "Laser and shield interaction during Ultimate Shape Fight",
-        "caption": "Combat \u00b7 Laser and shield interaction."
+        "caption": "Combat · Laser and shield interaction."
       },
       {
         "type": "image",
         "src": "shape-fight-shape-184527.png",
         "alt": "Player one rectangle or triangle selection prompt",
-        "caption": "Player setup \u00b7 Rectangle or triangle selection."
+        "caption": "Player setup · Rectangle or triangle selection."
       },
       {
         "type": "image",
         "src": "shape-fight-shape-184532.png",
         "alt": "Ultimate Shape Fight opening prompt and character setup",
-        "caption": "Start menu \u00b7 Game entry and player-one setup."
+        "caption": "Start menu · Game entry and player-one setup."
       },
       {
         "type": "image",
         "src": "shape-fight-shape-184555.png",
         "alt": "Player two shape, health bar color, and laser color choices",
-        "caption": "Customization \u00b7 Player-two shape, health-bar color, and laser color."
+        "caption": "Customization · Player-two shape, health-bar color, and laser color."
       },
       {
         "type": "image",
         "src": "shape-fight-shape-184745.png",
         "alt": "MATLAB command window reporting a broken shield and player one hit",
-        "caption": "Combat feedback \u00b7 Shield broken and player hit."
+        "caption": "Combat feedback · Shield broken and player hit."
       }
     ]
   },
@@ -285,19 +326,19 @@ window.PROJECT_GALLERIES = {
         "type": "image",
         "src": "gbm-gbm-hall-of-flags.png",
         "alt": "IEEE USF general body meeting audience in the Hall of Flags",
-        "caption": "IEEE USF GBM \u00b7 Audience in the Hall of Flags."
+        "caption": "IEEE USF GBM · Audience in the Hall of Flags."
       },
       {
         "type": "image",
         "src": "gbm-gbm-exo-table.png",
         "alt": "IEEE EXO demonstration table with the robotic hand, laptop, and team members",
-        "caption": "EXO demonstration table \u00b7 Robotic hand, control interface, and team members."
+        "caption": "EXO demonstration table · Robotic hand, control interface, and team members."
       },
       {
         "type": "image",
         "src": "gbm-gbm-project-discussion.png",
         "alt": "Project discussion with students at the IEEE USF general body meeting",
-        "caption": "GBM outreach \u00b7 Discussing the project with attendees."
+        "caption": "GBM outreach · Discussing the project with attendees."
       }
     ]
   },
@@ -308,13 +349,13 @@ window.PROJECT_GALLERIES = {
         "type": "image",
         "src": "sourdoughstateflour.jpg",
         "alt": "Sourdough loaf baked by Gustavo at State Flour",
-        "caption": "State Flour \u00b7 sourdough production."
+        "caption": "State Flour · sourdough production."
       },
       {
         "type": "image",
         "src": "state-flour-sourdough.webp",
         "alt": "State Flour bakery sourdough",
-        "caption": "State Flour \u00b7 production work."
+        "caption": "State Flour · production work."
       }
     ]
   },
@@ -325,7 +366,7 @@ window.PROJECT_GALLERIES = {
         "type": "image",
         "src": "gbm-gbm-exo-table.png",
         "alt": "IEEE EXO demonstration table at a USF GBM",
-        "caption": "IEEE USF GBM \u00b7 EXO project outreach table."
+        "caption": "IEEE USF GBM · EXO project outreach table."
       }
     ]
   },
