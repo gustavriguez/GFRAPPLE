@@ -8,28 +8,28 @@ window.PORTFOLIO_CONTENT = {
         "description": "Lower-limb exoskeleton program: powered hip and knee, passive ankle, gait data, embedded controls, CAD, testing, and multidisciplinary leadership.",
         "link": "work.html#exo-project",
         "linkText": "See project",
-        "badge": "EX"
+        "badge": "EXO"
       },
       {
         "title": "Lonza",
         "description": "Reliability work on manufacturing equipment, root-cause investigations, mechanical alignment, asset systems, maintenance workflows, and lifecycle planning.",
         "link": "work.html#xcelodose",
         "linkText": "See work",
-        "badge": "LZ"
+        "badge": "LNZ"
       },
       {
         "title": "S.M.U.R.F.",
         "description": "Power Apps maintenance request system with guided intake, urgency logic, assignment, reminders, and searchable records.",
         "link": "work.html#smurf",
         "linkText": "See system",
-        "badge": "S"
+        "badge": "SMR"
       },
       {
         "title": "CARRT",
         "description": "Human-motion research using IMUs, Vicon, experimental testing, validation, data-quality review, analysis, and technical documentation.",
         "link": "work.html#carrt",
         "linkText": "See research",
-        "badge": "C"
+        "badge": "RRT"
       }
     ],
     "galleryShelfLabel": "open a mini gallery:"
