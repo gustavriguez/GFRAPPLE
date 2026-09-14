@@ -289,3 +289,38 @@ body[data-page="about"] .daily-dock.right .site-photo{display:none}
   .tampa-v21-weather-sprite{width:66px!important;height:66px!important}
 }
 @media(prefers-reduced-motion:reduce){.tampa-v21-weather-sprite.sprite-swap{animation:none}}
+
+
+/* --- v22 embedded weather sprite atlas: no external sprite paths required --- */
+.tampa-v20-titlebar{grid-template-columns:minmax(0,1fr) 82px;min-height:94px}
+.tampa-v22-weather-sprite{
+  --weather-row:100%;
+  width:82px;
+  height:82px;
+  align-self:end;
+  justify-self:end;
+  background-repeat:no-repeat;
+  background-size:400% 800%;
+  background-position-y:var(--weather-row);
+  background-position-x:0%;
+  image-rendering:pixelated;
+  image-rendering:crisp-edges;
+  filter:drop-shadow(0 1px 0 rgba(0,0,0,.22));
+  transform-origin:50% 100%;
+  animation:v22WeatherFrames 1.05s linear infinite;
+}
+.tampa-v22-weather-sprite.sprite-swap{animation:v22SpriteSwap .25s steps(2,end),v22WeatherFrames 1.05s linear .25s infinite}
+@keyframes v22WeatherFrames{
+  0%,24.99%{background-position-x:0%}
+  25%,49.99%{background-position-x:33.333333%}
+  50%,74.99%{background-position-x:66.666667%}
+  75%,100%{background-position-x:100%}
+}
+@keyframes v22SpriteSwap{0%{transform:translateY(3px) scale(.96);opacity:.5}100%{transform:translateY(0) scale(1);opacity:1}}
+@media(max-width:1319px){
+  .tampa-v20-titlebar{grid-template-columns:minmax(0,1fr) 70px;min-height:82px}
+  .tampa-v22-weather-sprite{width:70px;height:70px}
+}
+@media(prefers-reduced-motion:reduce){
+  .tampa-v22-weather-sprite,.tampa-v22-weather-sprite.sprite-swap{animation:none;background-position-x:0%}
+}
