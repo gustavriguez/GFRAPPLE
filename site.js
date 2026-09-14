@@ -216,15 +216,10 @@ qa('[data-gallery-open]').forEach(el=>el.addEventListener('click',e=>{e.preventD
     const wrap=el('div','button-junk-wrap');
     const items=[
       ['https://www.last.fm/user/guub33','last.fm','guub33'],
-      ['https://letterboxd.com/guub33/','letterboxd','guub33'],
       ['https://www.linkedin.com/in/gustavo33','linkedin','gustavo33'],
       ['mailto:gustavorodriguez@usf.edu','email me','@usf.edu'],
-      ['#','persona','night shift'],
       ['#','pokémon','party data'],
-      ['#','forest mode','ferns + shade'],
-      ['#','bears','approved'],
-      ['projects.html','robotics','+ bionics'],
-      ['media.html','shoegaze','on repeat']
+      ['projects.html','robotics','+ bionics']
     ];
     items.forEach(([href,a,b])=>{
       const x=document.createElement('a');x.className='junk88';x.href=href;if(/^https/.test(href)){x.target='_blank';x.rel='noopener'}
@@ -249,14 +244,8 @@ qa('[data-gallery-open]').forEach(el=>el.addEventListener('click',e=>{e.preventD
   qa('.pixel-sprite.shark,.daily-sprite-strip.shark-strip').forEach(el=>el.remove());
   qa('.section-sprite-badge img[src*="bullshark"]').forEach(img=>img.closest('.section-sprite-badge')?.remove());
 
-  // Letterboxd is no longer promoted/tagged. Replace the old 88x31 button with a local favorites link.
-  qa('.button-junk-wrap a').forEach(a=>{
-    if((a.href||'').toLowerCase().includes('letterboxd')){
-      a.href='about.html#favorite-films';
-      a.removeAttribute('target'); a.removeAttribute('rel');
-      a.innerHTML='<span class="pix">favorite films<br>four on repeat</span>';
-    }
-  });
+  // Favorite films live directly on About; no external profile button is shown.
+
 
   function addFavoriteFilms(){
     if(page!=='about' || q('#favorite-films'))return;
@@ -444,4 +433,180 @@ qa('[data-gallery-open]').forEach(el=>el.addEventListener('click',e=>{e.preventD
 
   wireActions();
   requestAnimationFrame(wireActions);
+})();
+
+/* --- v20 weather patch: robust Tampa live panel + real graphs --- */
+(()=>{
+  const q=(s,e=document)=>e.querySelector(s);
+  const TAMPA_TZ='America/New_York';
+  const WEATHER_URL='https://api.open-meteo.com/v1/forecast?latitude=27.9506&longitude=-82.4572&current=temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m&hourly=temperature_2m,precipitation_probability&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=America%2FNew_York&forecast_days=2';
+
+  function weatherLabel(code){
+    return ({
+      0:'Clear',1:'Mostly clear',2:'Partly cloudy',3:'Overcast',45:'Fog',48:'Rime fog',
+      51:'Light drizzle',53:'Drizzle',55:'Heavy drizzle',56:'Freezing drizzle',57:'Freezing drizzle',
+      61:'Light rain',63:'Rain',65:'Heavy rain',66:'Freezing rain',67:'Freezing rain',
+      71:'Light snow',73:'Snow',75:'Heavy snow',77:'Snow grains',
+      80:'Rain showers',81:'Showers',82:'Heavy showers',85:'Snow showers',86:'Heavy snow showers',
+      95:'Thunderstorms',96:'Storms + hail',99:'Storms + hail'
+    })[Number(code)] || 'Tampa weather';
+  }
+
+  function clockParts(){
+    const now=new Date();
+    return {
+      time:new Intl.DateTimeFormat('en-US',{hour:'numeric',minute:'2-digit',second:'2-digit',timeZone:TAMPA_TZ}).format(now),
+      date:new Intl.DateTimeFormat('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric',timeZone:TAMPA_TZ}).format(now)
+    };
+  }
+
+  function shortHour(localIso){
+    if(!localIso)return '';
+    const hh=Number(localIso.slice(11,13));
+    if(Number.isNaN(hh))return '';
+    const suffix=hh>=12?'PM':'AM';
+    const h=((hh+11)%12)+1;
+    return `${h} ${suffix}`;
+  }
+
+  function shortTime(localIso){
+    if(!localIso)return '--';
+    const part=localIso.slice(11,16);
+    const [h0,m]=part.split(':').map(Number);
+    const suffix=h0>=12?'PM':'AM';
+    const h=((h0+11)%12)+1;
+    return `${h}:${String(m).padStart(2,'0')} ${suffix}`;
+  }
+
+  function chartSvg(values, labels, kind){
+    const vals=(values||[]).map(v=>Number(v)).filter(v=>Number.isFinite(v));
+    if(!vals.length)return '<div class="tampa-empty">forecast data unavailable</div>';
+    const W=218,H=70,pL=8,pR=8,pT=9,pB=19;
+    let lo=Math.min(...vals), hi=Math.max(...vals);
+    if(kind==='rain'){lo=0;hi=100}else if(hi-lo<4){lo-=2;hi+=2}
+    const x=i=>pL+(W-pL-pR)*(i/Math.max(1,vals.length-1));
+    const y=v=>pT+(H-pT-pB)*(1-(v-lo)/Math.max(.001,hi-lo));
+    const pts=vals.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+    const indices=[0,Math.floor((vals.length-1)/2),vals.length-1];
+    const axis=indices.map((i,idx)=>`<text class="tampa-v20-axis" x="${x(i).toFixed(1)}" y="66" text-anchor="${idx===0?'start':idx===2?'end':'middle'}">${labels[i]||''}</text>`).join('');
+    const dots=vals.map((v,i)=>{
+      if(i!==0 && i!==vals.length-1 && i%3!==0)return '';
+      const val=kind==='rain'?`${Math.round(v)}%`:`${Math.round(v)}°`;
+      return `<circle class="tampa-v20-dot" cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="2"><title>${labels[i]||''}: ${val}</title></circle>`;
+    }).join('');
+    const cls=kind==='rain'?'tampa-v20-rain':'tampa-v20-temp';
+    const grid=[pT, pT+(H-pT-pB)/2, H-pB].map(gy=>`<line class="tampa-v20-grid" x1="${pL}" x2="${W-pR}" y1="${gy.toFixed(1)}" y2="${gy.toFixed(1)}"></line>`).join('');
+    return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${kind==='rain'?'Rain chance':'Temperature'} for the next 12 hours">${grid}<polyline class="${cls}" points="${pts}"></polyline>${dots}${axis}</svg>`;
+  }
+
+  function markup(){
+    return `
+      <section class="tampa-v20" aria-label="Live Tampa weather">
+        <div class="tampa-v20-titlebar">
+          <div>
+            <small>TAMPA · LIVE</small>
+            <strong data-v20-clock>--:--:--</strong>
+            <span data-v20-date></span>
+          </div>
+          <img src="sprites/gustavo-weather.gif" alt="" aria-hidden="true" onerror="this.style.display='none'">
+        </div>
+        <div class="tampa-v20-now">
+          <div class="tampa-v20-temp" data-v20-temp>--°</div>
+          <div class="tampa-v20-condition"><b data-v20-condition>connecting…</b><span data-v20-feels>live forecast</span></div>
+        </div>
+        <div class="tampa-v20-stats">
+          <div><small>humidity</small><b data-v20-humidity>--%</b></div>
+          <div><small>wind</small><b data-v20-wind>-- mph</b></div>
+          <div><small>today</small><b data-v20-hilo>-- / --</b></div>
+          <div><small>rain max</small><b data-v20-rainmax>--%</b></div>
+          <div><small>sunrise</small><b data-v20-sunrise>--</b></div>
+          <div><small>sunset</small><b data-v20-sunset>--</b></div>
+        </div>
+        <div class="tampa-v20-chart">
+          <div class="tampa-v20-charthead"><b>temperature · next 12h</b><span data-v20-temprange></span></div>
+          <div data-v20-tempchart></div>
+        </div>
+        <div class="tampa-v20-chart">
+          <div class="tampa-v20-charthead"><b>rain chance · next 12h</b><span data-v20-rainrange></span></div>
+          <div data-v20-rainchart></div>
+        </div>
+        <div class="tampa-v20-foot"><span data-v20-updated>updating…</span><button type="button" data-v20-refresh>refresh</button></div>
+      </section>`;
+  }
+
+  function mount(){
+    const card=q('.daily-dock.right .daily-card');
+    if(!card)return;
+    q('.tampa-mini',card)?.remove();
+    q('.tampa-live',card)?.remove();
+    q('.tampa-v20',card)?.remove();
+    const holder=document.createElement('div');
+    holder.innerHTML=markup();
+    const panel=holder.firstElementChild;
+    const status=q('.daily-status',card);
+    card.insertBefore(panel,status||null);
+
+    const tick=()=>{
+      const x=clockParts();
+      q('[data-v20-clock]',panel).textContent=x.time;
+      q('[data-v20-date]',panel).textContent=x.date;
+    };
+    tick();
+    const clockTimer=setInterval(tick,1000);
+
+    async function load(){
+      const refresh=q('[data-v20-refresh]',panel);
+      refresh.disabled=true;
+      q('[data-v20-updated]',panel).textContent='updating…';
+      try{
+        const res=await fetch(WEATHER_URL,{cache:'no-store'});
+        if(!res.ok)throw new Error(`HTTP ${res.status}`);
+        const j=await res.json();
+        const c=j.current||{}, h=j.hourly||{}, d=j.daily||{};
+        q('[data-v20-temp]',panel).textContent=Number.isFinite(Number(c.temperature_2m))?Math.round(c.temperature_2m)+'°':'--°';
+        q('[data-v20-condition]',panel).textContent=weatherLabel(c.weather_code);
+        q('[data-v20-feels]',panel).textContent=Number.isFinite(Number(c.apparent_temperature))?'feels like '+Math.round(c.apparent_temperature)+'°F':'Tampa, FL';
+        q('[data-v20-humidity]',panel).textContent=Number.isFinite(Number(c.relative_humidity_2m))?Math.round(c.relative_humidity_2m)+'%':'--%';
+        q('[data-v20-wind]',panel).textContent=Number.isFinite(Number(c.wind_speed_10m))?Math.round(c.wind_speed_10m)+' mph':'-- mph';
+        const hi=Number(d.temperature_2m_max?.[0]), lo=Number(d.temperature_2m_min?.[0]);
+        q('[data-v20-hilo]',panel).textContent=(Number.isFinite(hi)&&Number.isFinite(lo))?`${Math.round(hi)}° / ${Math.round(lo)}°`:'-- / --';
+        const rmax=Number(d.precipitation_probability_max?.[0]);
+        q('[data-v20-rainmax]',panel).textContent=Number.isFinite(rmax)?Math.round(rmax)+'%':'--%';
+        q('[data-v20-sunrise]',panel).textContent=shortTime(d.sunrise?.[0]);
+        q('[data-v20-sunset]',panel).textContent=shortTime(d.sunset?.[0]);
+
+        const times=h.time||[], temps=h.temperature_2m||[], rain=h.precipitation_probability||[];
+        const currentHour=(c.time||'').slice(0,13);
+        let start=Math.max(0,times.findIndex(t=>String(t).slice(0,13)>=currentHour));
+        if(start<0)start=0;
+        const end=Math.min(start+12,times.length,temps.length,rain.length);
+        const tTimes=times.slice(start,end);
+        const tVals=temps.slice(start,end).map(Number);
+        const rVals=rain.slice(start,end).map(v=>Number(v)||0);
+        const labels=tTimes.map(shortHour);
+        q('[data-v20-tempchart]',panel).innerHTML=chartSvg(tVals,labels,'temp');
+        q('[data-v20-rainchart]',panel).innerHTML=chartSvg(rVals,labels,'rain');
+        if(tVals.length){q('[data-v20-temprange]',panel).textContent=`${Math.round(Math.min(...tVals))}–${Math.round(Math.max(...tVals))}°F`}
+        if(rVals.length){q('[data-v20-rainrange]',panel).textContent=`max ${Math.round(Math.max(...rVals))}%`}
+        const upd=new Intl.DateTimeFormat('en-US',{hour:'numeric',minute:'2-digit',timeZone:TAMPA_TZ}).format(new Date());
+        q('[data-v20-updated]',panel).textContent=`updated ${upd} · Open-Meteo`;
+      }catch(err){
+        q('[data-v20-condition]',panel).textContent='Forecast unavailable';
+        q('[data-v20-feels]',panel).textContent='time still live';
+        q('[data-v20-tempchart]',panel).innerHTML='<div class="tampa-empty">weather API did not respond</div>';
+        q('[data-v20-rainchart]',panel).innerHTML='<div class="tampa-empty">try refresh in a moment</div>';
+        q('[data-v20-updated]',panel).textContent='connection failed';
+      }finally{
+        refresh.disabled=false;
+      }
+    }
+
+    q('[data-v20-refresh]',panel).addEventListener('click',load);
+    load();
+    const weatherTimer=setInterval(load,15*60*1000);
+    window.addEventListener('beforeunload',()=>{clearInterval(clockTimer);clearInterval(weatherTimer)},{once:true});
+  }
+
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});
+  else mount();
 })();

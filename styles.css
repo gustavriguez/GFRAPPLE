@@ -229,3 +229,37 @@ body[data-page="about"] .daily-dock.right .site-photo{display:none}
 
 /* Root-level poster images are packaged with this patch; keep cards stable if one ever fails. */
 .favorite-film.poster-missing:before{content:'poster';display:flex;align-items:center;justify-content:center;width:100%;aspect-ratio:2/3;border:1px solid #777;background:#e7eaec;color:#6e777d;font:9px Arial;text-transform:uppercase;letter-spacing:.08em}
+
+/* --- v20 Tampa weather patch --- */
+@media(min-width:1320px){.daily-dock.right{width:236px}}
+@media(min-width:1181px) and (max-width:1319px){.daily-dock.right{width:198px}}
+.tampa-v20{margin:7px 0 0;border:1px solid #9ea9b0;border-radius:5px;background:#fff;overflow:hidden;color:#1e252b;font-family:Arial,Helvetica,sans-serif}
+.tampa-v20-titlebar{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:7px;padding:8px 9px 7px;background:linear-gradient(#fbfdff,#edf2f6);border-bottom:1px solid #c7cfd4}
+.tampa-v20-titlebar small{display:block;font:bold 7px/1 Arial,sans-serif;letter-spacing:.12em;color:#72808a}
+.tampa-v20-titlebar strong{display:block;margin-top:3px;font:25px/.95 Georgia,'Times New Roman',serif;font-weight:normal;color:#193b58;letter-spacing:-1px;white-space:nowrap}
+.tampa-v20-titlebar span{display:block;margin-top:4px;font:7.5px/1.2 Arial,sans-serif;color:#6e7a83}
+.tampa-v20-titlebar img{width:51px;height:58px;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 1px 0 rgba(0,0,0,.16))}
+.tampa-v20-now{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:9px;padding:10px 9px 8px;border-bottom:1px solid #d5dadd}
+.tampa-v20-temp{font:35px/.88 Georgia,'Times New Roman',serif;letter-spacing:-1.7px;color:#18242c}
+.tampa-v20-condition b{display:block;font:12px/1.1 Georgia,'Times New Roman',serif;font-weight:normal;color:#263844}
+.tampa-v20-condition span{display:block;margin-top:4px;font:7.5px/1.2 Arial,sans-serif;color:#77838b}
+.tampa-v20-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));background:#fbfbfb;border-bottom:1px solid #d6dcdf}
+.tampa-v20-stats>div{min-width:0;padding:6px 8px;border-right:1px solid #e1e4e6;border-bottom:1px solid #e3e6e8}
+.tampa-v20-stats>div:nth-child(2n){border-right:0}.tampa-v20-stats>div:nth-last-child(-n+2){border-bottom:0}
+.tampa-v20-stats small{display:block;font:bold 6.5px/1 Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#87939a}
+.tampa-v20-stats b{display:block;margin-top:3px;font:11px/1.05 Georgia,'Times New Roman',serif;font-weight:normal;color:#223746;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tampa-v20-chart{padding:8px 8px 5px;background:#fff;border-bottom:1px solid #d8dde0}
+.tampa-v20-charthead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:2px}
+.tampa-v20-charthead b{font:bold 7px/1 Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#52616b}
+.tampa-v20-charthead span{font:7px/1 Arial,sans-serif;color:#889299;white-space:nowrap}
+.tampa-v20-chart svg{display:block;width:100%;height:auto;min-height:66px}
+.tampa-v20-grid{stroke:#e5e9eb;stroke-width:1}
+.tampa-v20-temp{fill:none;stroke:#2c78b7;stroke-width:2;vector-effect:non-scaling-stroke}
+.tampa-v20-rain{fill:none;stroke:#537b99;stroke-width:1.8;vector-effect:non-scaling-stroke}
+.tampa-v20-dot{fill:#fff;stroke:#2c78b7;stroke-width:1.3;vector-effect:non-scaling-stroke}
+.tampa-v20-axis{font:6.5px Arial,sans-serif;fill:#7a858e}
+.tampa-v20-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 8px;background:#f3f5f6;font:6.5px/1.2 Arial,sans-serif;color:#858f96}
+.tampa-v20-foot button{border:1px solid #9aa5ac;border-radius:6px;background:linear-gradient(#fff,#dfe7ec);padding:3px 6px;font:bold 6.5px Arial,sans-serif;color:#425b6c;cursor:pointer}
+.tampa-v20-foot button:disabled{opacity:.55;cursor:default}
+.tampa-empty{padding:18px 8px;text-align:center;font:7px/1.3 Arial,sans-serif;color:#89939b}
+@media(max-width:1319px){.tampa-v20-titlebar img{width:42px;height:50px}.tampa-v20-titlebar strong{font-size:22px}.tampa-v20-temp{font-size:31px}.tampa-v20-charthead{display:block}.tampa-v20-charthead span{display:block;margin-top:2px}}
