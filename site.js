@@ -452,6 +452,43 @@ qa('[data-gallery-open]').forEach(el=>el.addEventListener('click',e=>{e.preventD
     })[Number(code)] || 'Tampa weather';
   }
 
+  function weatherSpriteName(current,daily){
+    const code=Number(current?.weather_code);
+    const temp=Number(current?.temperature_2m);
+    const feels=Number(current?.apparent_temperature);
+    const wind=Number(current?.wind_speed_10m);
+    const localTime=String(current?.time||'');
+    const nowHM=localTime.slice(11,16);
+    const sunrise=String(daily?.sunrise?.[0]||'').slice(11,16);
+    const sunset=String(daily?.sunset?.[0]||'').slice(11,16);
+    const isNight=Boolean(nowHM && sunrise && sunset && (nowHM<sunrise || nowHM>=sunset));
+    if([95,96,99].includes(code))return 'thunder';
+    if([51,53,55,56,57,61,63,65,66,67,71,73,75,77,80,81,82,85,86].includes(code))return 'rain';
+    if(Number.isFinite(wind) && wind>=13)return 'windy';
+    if(Number.isFinite(feels) && feels>=90 || Number.isFinite(temp) && temp>=91)return 'hot';
+    if(isNight)return 'night';
+    if([1,2,3,45,48].includes(code))return 'partly-cloudy';
+    if(code===0)return 'sunny';
+    return 'presenter';
+  }
+
+  function updateWeatherSprite(panel,current,daily){
+    const img=q('[data-v21-weather-sprite]',panel);
+    if(!img)return;
+    const name=weatherSpriteName(current,daily);
+    const reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const ext=reduced?'png':'webp';
+    const next=`weather-sprites/${name}.${ext}`;
+    if(img.dataset.weatherName!==name){
+      img.dataset.weatherName=name;
+      img.alt=`Animated Gustavo weather sprite: ${name.replace('-', ' ')}`;
+      img.classList.remove('sprite-swap');
+      void img.offsetWidth;
+      img.src=next;
+      img.classList.add('sprite-swap');
+    }
+  }
+
   function clockParts(){
     const now=new Date();
     return {
@@ -508,7 +545,7 @@ qa('[data-gallery-open]').forEach(el=>el.addEventListener('click',e=>{e.preventD
             <strong data-v20-clock>--:--:--</strong>
             <span data-v20-date></span>
           </div>
-          <img src="sprites/gustavo-weather.gif" alt="" aria-hidden="true" onerror="this.style.display='none'">
+          <img class="tampa-v21-weather-sprite" data-v21-weather-sprite src="weather-sprites/presenter.webp" alt="Animated Gustavo weather sprite" onerror="this.src='weather-sprites/presenter.png'">
         </div>
         <div class="tampa-v20-now">
           <div class="tampa-v20-temp" data-v20-temp>--°</div>
@@ -574,6 +611,7 @@ qa('[data-gallery-open]').forEach(el=>el.addEventListener('click',e=>{e.preventD
         q('[data-v20-rainmax]',panel).textContent=Number.isFinite(rmax)?Math.round(rmax)+'%':'--%';
         q('[data-v20-sunrise]',panel).textContent=shortTime(d.sunrise?.[0]);
         q('[data-v20-sunset]',panel).textContent=shortTime(d.sunset?.[0]);
+        updateWeatherSprite(panel,c,d);
 
         const times=h.time||[], temps=h.temperature_2m||[], rain=h.precipitation_probability||[];
         const currentHour=(c.time||'').slice(0,13);
@@ -596,6 +634,8 @@ qa('[data-gallery-open]').forEach(el=>el.addEventListener('click',e=>{e.preventD
         q('[data-v20-tempchart]',panel).innerHTML='<div class="tampa-empty">weather API did not respond</div>';
         q('[data-v20-rainchart]',panel).innerHTML='<div class="tampa-empty">try refresh in a moment</div>';
         q('[data-v20-updated]',panel).textContent='connection failed';
+        const failSprite=q('[data-v21-weather-sprite]',panel);
+        if(failSprite){failSprite.src='weather-sprites/presenter.webp';failSprite.dataset.weatherName='presenter';}
       }finally{
         refresh.disabled=false;
       }

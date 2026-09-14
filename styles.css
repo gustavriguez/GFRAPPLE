@@ -263,3 +263,29 @@ body[data-page="about"] .daily-dock.right .site-photo{display:none}
 .tampa-v20-foot button:disabled{opacity:.55;cursor:default}
 .tampa-empty{padding:18px 8px;text-align:center;font:7px/1.3 Arial,sans-serif;color:#89939b}
 @media(max-width:1319px){.tampa-v20-titlebar img{width:42px;height:50px}.tampa-v20-titlebar strong{font-size:22px}.tampa-v20-temp{font-size:31px}.tampa-v20-charthead{display:block}.tampa-v20-charthead span{display:block;margin-top:2px}}
+
+
+/* --- v21 animated weather sprites --- */
+/* Hide legacy page-level weather mascot; the live mascot now belongs to the Tampa card. */
+.pixel-sprite.weather,.sprite-weather-mini,.tampa-live-sprite{display:none!important}
+.tampa-v20-titlebar{grid-template-columns:minmax(0,1fr) 78px;min-height:90px;overflow:visible}
+.tampa-v21-weather-sprite{
+  width:78px!important;
+  height:78px!important;
+  max-width:none;
+  object-fit:contain;
+  object-position:center bottom;
+  image-rendering:pixelated;
+  image-rendering:crisp-edges;
+  align-self:end;
+  justify-self:end;
+  filter:drop-shadow(0 1px 0 rgba(0,0,0,.22));
+  transform-origin:50% 100%;
+}
+.tampa-v21-weather-sprite.sprite-swap{animation:v21SpriteSwap .28s steps(2,end)}
+@keyframes v21SpriteSwap{0%{transform:translateY(3px) scale(.96);opacity:.5}100%{transform:translateY(0) scale(1);opacity:1}}
+@media(max-width:1319px){
+  .tampa-v20-titlebar{grid-template-columns:minmax(0,1fr) 66px;min-height:80px}
+  .tampa-v21-weather-sprite{width:66px!important;height:66px!important}
+}
+@media(prefers-reduced-motion:reduce){.tampa-v21-weather-sprite.sprite-swap{animation:none}}
